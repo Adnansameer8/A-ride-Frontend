@@ -53,8 +53,6 @@ const Navbar = () => {
       { id: 'home', label: 'Home', path: '/home', icon: <Home size={18} /> },
        { id: 'mechanic', label: 'Services', path: '/services', icon: <Wrench size={18} /> },
       { id: 'onroading', label: 'Explore Trips', path: '/explore', icon: <Route size={18} /> },
-      // { id: 'offroading', label: 'Off Road', path: '/explore/off-roading', icon: <Mountain size={18} /> },
-     
       { id: 'contact', label: 'Support', path: '/support', icon: <LifeBuoy size={18} /> },
     ];
   };
@@ -81,7 +79,8 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (showUserMenu && !e.target.closest('.user-section')) {
+      // FIX: Changed to match the new unique class name
+      if (showUserMenu && !e.target.closest('.nav-user-section')) {
         setShowUserMenu(false);
       }
     };
@@ -224,15 +223,15 @@ const Navbar = () => {
           transform: translateX(-50%) scaleX(1);
         }
 
-        /* ── USER SECTION ── */
-        .user-section {
+        /* ── FIX: ISOLATED USER SECTION ── */
+        .nav-user-section {
           position: relative;
           display: flex;
           align-items: center;
           gap: 12px;
         }
 
-        .user-button {
+        .nav-user-btn {
           display: flex;
           align-items: center;
           gap: 10px;
@@ -244,15 +243,15 @@ const Navbar = () => {
           transition: all 0.3s ease;
         }
 
-        .user-button:hover {
+        .nav-user-btn:hover {
           background: rgba(255,92,0,0.15);
           border-color: rgba(255,92,0,0.3);
           transform: translateY(-1px);
         }
 
-        .user-avatar {
-          width: 36px;
-          height: 36px;
+        .nav-user-avatar {
+          width: 36px !important;
+          height: 36px !important;
           border-radius: 50%;
           background: linear-gradient(135deg, #FF5C00, #ff9a00);
           display: flex;
@@ -262,9 +261,10 @@ const Navbar = () => {
           font-weight: 700;
           font-size: 16px;
           position: relative;
+          flex-shrink: 0;
         }
 
-        .admin-badge {
+        .nav-admin-badge {
           position: absolute;
           top: -6px;
           right: -8px;
@@ -278,22 +278,27 @@ const Navbar = () => {
           box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        .user-info {
+        .nav-user-details {
           display: flex;
           flex-direction: column;
           align-items: flex-start;
+          justify-content: center;
         }
 
-        .user-name {
-          font-size: 14px;
-          font-weight: 600;
-          color: rgba(0, 0, 0, 0.9);
+        .nav-user-name-text {
+          font-size: 14px !important;
+          font-weight: 700 !important;
+          color: rgba(0, 0, 0, 0.9) !important;
+          margin: 0 !important;
+          line-height: 1.2 !important;
         }
 
-        .user-role {
-          font-size: 11px;
-          color: rgba(0, 0, 0, 0.5);
-          text-transform: capitalize;
+        .nav-user-role-text {
+          font-size: 11px !important;
+          color: rgba(0, 0, 0, 0.5) !important;
+          text-transform: capitalize !important;
+          margin: 0 !important;
+          line-height: 1.2 !important;
         }
 
         .user-dropdown {
@@ -665,22 +670,23 @@ const Navbar = () => {
           </ul>
         </div>
 
-        <div className="user-section">
+        {/* ── ISOLATED USER SECTION ── */}
+        <div className="nav-user-section">
           {isAuthenticated ? (
             <>
               <div
-                className="user-button"
+                className="nav-user-btn"
                 onClick={() => setShowUserMenu(!showUserMenu)}
               >
-                <div className="user-avatar">
+                <div className="nav-user-avatar">
                   {user?.name?.charAt(0).toUpperCase()}
                   {user?.role === 'admin' && (
-                    <span className="admin-badge">ADMIN</span>
+                    <span className="nav-admin-badge">ADMIN</span>
                   )}
                 </div>
-                <div className="user-info">
-                  <span className="user-name">{user?.name?.split(' ')[0]}</span>
-                  <span className="user-role">{user?.role || 'User'}</span>
+                <div className="nav-user-details">
+                  <span className="nav-user-name-text">{user?.name?.split(' ')[0]}</span>
+                  <span className="nav-user-role-text">{user?.role || 'User'}</span>
                 </div>
               </div>
 

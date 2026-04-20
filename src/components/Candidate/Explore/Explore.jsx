@@ -42,7 +42,7 @@ const Explore = () => {
             src="/exploreoff.png"
             alt="Off-Roading Adventure"
             /* ── YOUR CUSTOM ZOOM STYLE ADDED HERE ── */
-            style={{ width: '57%', height: '60%', objectFit: 'cover' }}
+            className="custom-offroad-img"
           />
           </div>
           <h2>Off-Roading</h2>

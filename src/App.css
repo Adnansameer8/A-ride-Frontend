@@ -1,8 +1,8 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 0;       
+  text-align: left;  
 }
 body {
   font-family: "Sekuya", system-ui, sans-serif;
@@ -14,6 +14,9 @@ body {
 /* (Buttons and inputs often ignore the body font by default) */
 input, button, textarea, select {
   font-family: inherit;
+}
+input, textarea, select {
+  font-size: 16px !important;
 }
 .logo {
   height: 6em;

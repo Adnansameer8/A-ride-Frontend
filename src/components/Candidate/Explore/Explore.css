@@ -214,6 +214,31 @@
     font-size: 14px;
   }
 }
+/* ── CUSTOM OFF-ROADING IMAGE STYLES ── */
+
+/* 1. Desktop View (Laptop/PC) - Large and Zoomed In */
+.custom-offroad-img {
+  width: 70% !important;
+  height: 70% !important;
+  object-fit: cover !important;
+}
+
+/* 2. Mobile View (Phones) - Un-cropped and perfectly fitted */
+@media (max-width: 768px) {
+  .custom-offroad-img {
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    /* If the dirt bike image has empty transparent space around it, 
+       this scale will visually bump it up to match the red bike */
+    transform: scale(2.1); 
+  }
+  
+  /* Ensure hover effect still works on mobile */
+  .category-card2:hover .custom-offroad-img {
+    transform: scale(1.4);
+  }
+}
 
 @media (max-width: 480px) {
   .explore {
