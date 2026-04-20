@@ -1,0 +1,152 @@
+/* About.css */
+
+.main {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 20px;
+  background-color: #f9fafb;
+  font-family: 'Outfit', sans-serif;
+}
+
+.about-container {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* slightly reduced */
+}
+
+/* Section A */
+.a {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom:0px;
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+}
+
+.a1 {
+  flex: 1;
+  min-width: 280px;
+  padding: 20px;
+  word-break: normal;      /* ← change from break-all to normal */
+  overflow-wrap: break-word;
+}
+
+.a1 h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 10px; /* reduced space */
+}
+
+.a1 p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #374151;
+  margin-bottom: 12px;
+}
+
+.a1 span {
+  font-weight: 600;
+  color: #dc2626;
+}
+
+.a2 {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 280px;
+}
+
+.a2 img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Section B */
+.b {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 40px;
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.b1 {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 280px;
+}
+
+.b1 img {
+  max-width: 80%;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.b2 {
+  flex: 1;
+  min-width: 280px;
+  padding: 20px;
+}
+
+.b2 h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 15px;
+}
+
+.b2 ul {
+  list-style: none;
+  padding: 0;
+}
+
+.b2 li {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #374151;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .a, .b {
+    flex-direction: column;
+    text-align: center;
+  }
+  .a1, .b2 {
+   width: 100%;           /* ← ensure full width */
+    box-sizing: border-box;
+    min-width: unset;  
+  }
+  .b1 img {
+    max-width: 100%;
+  }
+}
+
+/* Page Title (No underline, less margin) */
+.about-title {
+  font-size: 2.3rem;
+  font-weight: 700;
+  text-align: center;
+  color: #1f2937;
+  letter-spacing: 0.5px;
+}
