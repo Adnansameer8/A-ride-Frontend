@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../Authcontext';
-import logo from '../../../../public/logo.png';
+import logo from '/logo.png';
 import { 
-  Eye, 
-  User, 
-  Clipboard, 
-  LogOut, 
-  BarChart3, 
-  ClipboardList, 
-  Users, 
-  Map, 
-  Headphones, 
-  Ticket, 
-  Home, 
-  Wrench, 
-  Route, 
-  LifeBuoy 
+  Eye, User, Clipboard, LogOut, BarChart3, ClipboardList, 
+  Users, Map, Headphones, Ticket, Home, Wrench, Route, LifeBuoy, Settings
 } from "lucide-react";
 
 const Navbar = () => {
@@ -30,24 +18,25 @@ const Navbar = () => {
   // ── ROLE-BASED DYNAMIC LINKS (With Icons for Mobile) ──
   const getRoleLinks = () => {
     // 1. ADMIN NAVIGATION
-    if (user?.role === 'admin') {
-      return [
-        { id: 'admin-dash', label: 'Dashboard', path: '/admin/dashboard', icon: <BarChart3 size={18} /> },
-        { id: 'admin-bookings', label: 'Bookings', path: '/admin/bookings', icon: <ClipboardList size={18} /> },
-        { id: 'admin-users', label: 'Users', path: '/admin/users', icon: <Users size={18} /> },
-        { id: 'admin-trips', label: 'Trips', path: '/admin/trips', icon: <Map size={18} /> },
-        // ── NEW SUPPORT TICKETS LINK FOR ADMIN ──
-        { id: 'admin-tickets', label: 'Tickets', path: '/admin/tickets', icon: <Ticket size={18} /> },
-      ];
-    }
+   if (user?.role === 'admin') {
+  return [
+    { id: 'admin-dash',      label: 'Dashboard',  path: '/admin/dashboard',        icon: <BarChart3 size={18} /> },
+    { id: 'admin-users',     label: 'Users',      path: '/admin/users',            icon: <Users size={18} /> },
+    { id: 'admin-services',  label: 'Services',   path: '/admin/servicesManagement', icon: <Settings size={18} /> },
+    { id: 'admin-trips',     label: 'Trips',      path: '/admin/trips',            icon: <Map size={18} /> },
+    { id: 'admin-bookings',  label: 'Bookings',   path: '/admin/bookings',         icon: <ClipboardList size={18} /> },
+    { id: 'admin-tickets',   label: 'Tickets',    path: '/admin/tickets',          icon: <Ticket size={18} /> },
+  ];
+}
     // 2. SUPPORT NAVIGATION
     if (user?.role === 'support') {
-      return [
-        { id: 'support-dash', label: 'Support Dash', path: '/support/dashboard', icon: <Headphones size={18} /> },
-        { id: 'support-tickets', label: 'Active Tickets', path: '/admin/tickets', icon: <Ticket size={18} /> },
-        { id: 'support-bookings', label: 'Bookings', path: '/admin/bookings', icon: <ClipboardList size={18} /> },
-      ];
-    }
+  return [
+    { id: 'support-dash',     label: 'Support Dash',  path: '/support/dashboard', icon: <Headphones size={18} /> },
+    { id: 'support-tickets',  label: 'Active Tickets', path: '/admin/tickets',    icon: <Ticket size={18} /> },
+    { id: 'support-bookings', label: 'Bookings',       path: '/admin/bookings',   icon: <ClipboardList size={18} /> },
+    { id: 'support-services', label: 'Services',       path: '/admin/services',   icon: <Settings size={18} /> }, // ← ADD THIS
+  ];
+}
     // 3. REGULAR USER NAVIGATION
     return [
       { id: 'home', label: 'Home', path: '/home', icon: <Home size={18} /> },
@@ -269,6 +258,20 @@ const Navbar = () => {
           top: -6px;
           right: -8px;
           background: #ff0000;
+          color: white;
+          font-size: 8px;
+          font-weight: 800;
+          padding: 2px 5px;
+          border-radius: 6px;
+          letter-spacing: 0.5px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .nav-support-badge {
+          position: absolute;
+          top: -6px;
+          right: -8px;
+          background: #2563eb;
           color: white;
           font-size: 8px;
           font-weight: 800;
@@ -683,16 +686,18 @@ const Navbar = () => {
                   {user?.role === 'admin' && (
                     <span className="nav-admin-badge">ADMIN</span>
                   )}
+                  {user?.role === 'support' && (
+                    <span className="nav-support-badge">SUPPORT</span>
+                  )}
                 </div>
                 <div className="nav-user-details">
                   <span className="nav-user-name-text">{user?.name?.split(' ')[0]}</span>
-                  <span className="nav-user-role-text">{user?.role || 'User'}</span>
                 </div>
               </div>
 
               <div className={`user-dropdown ${showUserMenu ? 'show' : ''}`}>
                 {/* ── ADMIN CONDITION DESKTOP ── */}
-                {user?.role === 'admin' ? (
+                {user?.role === 'admin' || user?.role === 'support' ? (
                   <div
                   className="user-dropdown-item"
                   onClick={() => navigateTo('/home')}

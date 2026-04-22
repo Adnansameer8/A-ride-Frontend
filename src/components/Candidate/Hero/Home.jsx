@@ -1,101 +1,119 @@
-import React, { useEffect, useState } from "react";
-// Images
-import image1 from "../../../assets/image1.jpg";
-import image2 from "../../../assets/image2.png";
-import image3 from "../../../assets/image3.jpg";
-// Video
-import video1 from "../../../assets/video2.mp4";
-import video2 from "../../../assets/video1.mp4";
-import video3 from "../../../assets/video3.mp4";
-// Icons
-import play_icon from "../../../assets/play_icon.png";
-import pause_icon from "../../../assets/pause_icon.png";
-// CSS
+import React, { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../../../src/components/Candidate/Hero/Home.css";
 
+const images = ["/image3.png", "/image2.png", "/image1.jpg"];
+const videos = ["/video3.mp4", "/video1.mp4", "/video2.mp4"];
+
+const heroData = [
+  { title: "WE'VE GOT YOUR BACK",   subtitle: "24/7 on-demand doorstep mechanic services wherever you ride.",    route: "/services" },
+  { title: "CONQUER EVERY TERRAIN", subtitle: "Extreme off-roading and dirt track adventures for thrill-seekers.", route: "/explore/off-roading" },
+  { title: "DISCOVER THE THRILL",   subtitle: "Premium long-distance motorcycle expeditions across India.",        route: "/explore/long-trip" },
+];
+
 const Home = () => {
-  const [heroCount, setHeroCount] = useState(0);
+  const navigate = useNavigate();
+  const [heroCount, setHeroCount]   = useState(0);
   const [playStatus, setPlayStatus] = useState(false);
 
-  // ── Text Data matching your features ──
-  const heroData = [
-    { 
-      title: "DISCOVER THE THRILL", 
-      subtitle: "Premium long-distance motorcycle expeditions across India." 
-    },
-    { 
-      title: "CONQUER EVERY TERRAIN", 
-      subtitle: "Extreme off-roading and dirt track adventures for thrill-seekers." 
-    },
-    { 
-      title: "WE'VE GOT YOUR BACK", 
-      subtitle: "24/7 on-demand doorstep mechanic services wherever you ride." 
-    }
-  ];
-
-  // ── Arrays for seamless mapping ──
-  const images = [image1, image2, image3];
-  
-  // THE FIX: Using video1 for all three slots so Vite doesn't crash looking for missing files!
-  const videos = [video1, video2, video3]; 
-
+  // Auto-advance slides in image mode only
   useEffect(() => {
-    if (!playStatus) {
-      // Auto-play the slider every 5 seconds only if the video is NOT playing
-      const interval = setInterval(() => {
-        setHeroCount((count) => (count === 2 ? 0 : count + 1));
-      }, 5000);
-      return () => clearInterval(interval);
-    }
+    if (playStatus) return;
+    const id = setInterval(() => setHeroCount((c) => (c === 2 ? 0 : c + 1)), 5000);
+    return () => clearInterval(id);
   }, [playStatus]);
+
+  /*
+   * KEY FIX — callback ref
+   * useRef + useEffect misses the moment the <video> first mounts because
+   * the effect runs AFTER paint and ref.current is null on that first render.
+   * A callback ref fires the instant React attaches the DOM node.
+   */
+  const videoCallbackRef = useCallback(
+    (el) => {
+      if (!el) return;
+      el.muted = true;          // must be set in JS for iOS
+      el.load();
+      el.play().catch(() => {
+        // Autoplay blocked → resume on next user tap
+        const resume = () => { el.play(); document.removeEventListener("click", resume); };
+        document.addEventListener("click", resume, { once: true });
+      });
+    },
+    [heroCount]   // new ref callback when slide changes so new src plays
+  );
 
   return (
     <div className="home-container">
       <div className="home-background">
-        
-        {/* Dark overlay to make text readable */}
-        <div className="hero-overlay"></div>
 
-        {/* ── MEDIA RENDERING ── */}
+        <div className="hero-overlay" />
+
+        {/* ── MEDIA ── */}
         {playStatus ? (
-          <video key={videos[heroCount]} className="home-bg-media fade-in" autoPlay loop muted playsInline>
-            <source src={videos[heroCount]} type="video/mp4" />
-          </video>
+          <video
+            ref={videoCallbackRef}
+            key={`video-${heroCount}`}      /* key forces full remount on slide change */
+            className="home-bg-media fade-in"
+            src={videos[heroCount]}         /* src directly on <video>, NOT on <source> */
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster={images[heroCount]}
+          />
         ) : (
-          <img key={images[heroCount]} src={images[heroCount]} className="home-bg-media fade-in" alt="hero background" />
+          <img
+            key={`img-${heroCount}`}
+            src={images[heroCount]}
+            className="home-bg-media fade-in"
+            alt="hero background"
+            loading="eager"
+            decoding="async"
+          />
         )}
 
         {/* ── HERO TEXT ── */}
         <div className="hero-text fade-in" key={`text-${heroCount}`}>
+          <div className="hero-label">A-RIDE EXPERIENCE</div>
+        
           <h1>{heroData[heroCount].title}</h1>
           <p>{heroData[heroCount].subtitle}</p>
+          <button className="hero-cta" onClick={() => navigate(heroData[heroCount].route)}>
+            Explore Now
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+          
         </div>
 
-        {/* ── INTERACTIVE DOTS ── */}
-        <div className="hero-dots">
-          {heroData.map((_, index) => (
-            <div
-              key={index}
-              onClick={() => setHeroCount(index)}
-              className={`hero-dot ${heroCount === index ? "active" : ""}`}
-            ></div>
-          ))}
-        </div>
-
-        {/* ── PLAY BUTTON WITH TOOLTIP ── */}
-        <div className="explore-wrapper">
-          <div className="tooltip-container">
-            {/* Tooltip Text */}
-            <span className="tooltip-text">
-              {playStatus ? "Switch to Photos" : "Explore us through videos"}
-            </span>
-            
-            <div className="play-button" onClick={() => setPlayStatus(!playStatus)}>
-              <img
-                src={playStatus ? pause_icon : play_icon}
-                alt="toggle-video"
-                className="play-icon"
+        {/* ── BOTTOM BAR ── */}
+        <div className="hero-bottom-bar">
+          <div className="hero-dots">
+            {heroData.map((_, i) => (
+              <div
+                key={i}
+                onClick={() => setHeroCount(i)}
+                className={`hero-dot ${heroCount === i ? "active" : ""}`}
+                
               />
+            ))}
+          </div>
+
+          <div className="tooltip-container">
+            <span className="tooltip-text">{playStatus ? "Back to Photos" : "Watch Videos"}</span>
+            <div className="play-button" onClick={() => setPlayStatus((s) => !s)}>
+              {playStatus ? (
+                <svg className="play-icon" viewBox="0 0 24 24" fill="white">
+                  <rect x="6" y="4" width="4" height="16" rx="1" />
+                  <rect x="14" y="4" width="4" height="16" rx="1" />
+                </svg>
+              ) : (
+                <svg className="play-icon" viewBox="0 0 24 24" fill="white">
+                  <polygon points="5,3 19,12 5,21" />
+                </svg>
+              )}
             </div>
           </div>
         </div>
