@@ -1010,7 +1010,7 @@ export default function Services() {
               <div><input type="tel" value={phone} onChange={e => { setPhone(e.target.value); setFieldErrors(p => ({ ...p, phone: "" })); }} placeholder="Phone number (10 digits)" required style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", border: `2px solid ${fieldErrors.phone ? "#fca5a5" : "#e5e7eb"}`, borderRadius: "11px", fontSize: "13px", color: "#111", fontWeight: "500" }} /><FieldError field="phone" /></div>
               <div><input type="text" value={bikeNumber} onChange={e => { setBikeNumber(formatBikeNumber(e.target.value)); setFieldErrors(p => ({ ...p, bikeNumber: "" })); }} placeholder="Bike number (e.g. KA-05-KM-4512)" required maxLength={13} style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", border: `2px solid ${fieldErrors.bikeNumber ? "#fca5a5" : "#e5e7eb"}`, borderRadius: "11px", fontSize: "13px", color: "#111", fontWeight: "500" }} /><FieldError field="bikeNumber" /></div>
               <div><input type="text" value={bikeName} onChange={e => { setBikeName(e.target.value); setFieldErrors(p => ({ ...p, bikeName: "" })); }} placeholder="Bike model name (e.g. Royal Enfield Classic 350)" style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", border: `2px solid ${fieldErrors.bikeName ? "#fca5a5" : "#e5e7eb"}`, borderRadius: "11px", fontSize: "13px", color: "#111", fontWeight: "500" }} /><FieldError field="bikeName" /></div>
-              
+
               {/* Bike colour picker: 5 presets + Other button */}
               <div>
                 <div style={{ fontSize: "12px", fontWeight: "700", color: "#6b7280", marginBottom: "8px" }}>Bike colour *</div>
@@ -1028,14 +1028,27 @@ export default function Services() {
               </div>
 
               <div><textarea value={description} onChange={e => { setDescription(e.target.value); setFieldErrors(p => ({ ...p, description: "" })); }} placeholder="Briefly describe your issue…" rows={3} style={{ width: "100%", boxSizing: "border-box", padding: "12px 14px", border: `2px solid ${fieldErrors.description ? "#fca5a5" : "#e5e7eb"}`, borderRadius: "11px", fontSize: "13px", color: "#111", fontWeight: "500", resize: "vertical" }} /><FieldError field="description" /></div>
-              
+
               <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
                 <input type="checkbox" checked={acceptedTerms} onChange={e => { setAcceptedTerms(e.target.checked); if (e.target.checked) setError(""); }} style={{ width: "15px", height: "15px", accentColor: "#f97316", cursor: "pointer" }} />
-                <span style={{ fontSize: "12px", color: "#6b7280" }}>I agree to <a href="/Terms.html" target="_blank" rel="noopener noreferrer" style={{ color: "#f97316", fontWeight: "700", textDecoration: "none" }}>Terms & Conditions</a></span>
+                <span style={{ fontSize: "12px", color: "#6b7280" }}>
+                  I agree to{" "}
+                  <span
+                    onClick={() => navigate("/terms")}
+                    style={{
+                      color: "#f97316",
+                      fontWeight: "700",
+                      cursor: "pointer",
+                      textDecoration: "none"
+                    }}
+                  >
+                    Terms & Conditions
+                  </span>
+                </span>
               </label>
-              
+
               {error && <div style={{ fontSize: "12px", color: "#dc2626", fontWeight: "600", background: "#fef2f2", borderRadius: "8px", padding: "9px 12px", border: "1px solid #fecaca", display: "flex", alignItems: "center", gap: "6px" }}><AlertTriangle size={14} /> {error}</div>}
-              
+
               <button type="submit" disabled={!acceptedTerms || isFormDisabled} style={{ width: "100%", padding: "15px", borderRadius: "13px", border: "none", fontSize: "14px", fontWeight: "800", cursor: acceptedTerms && !isFormDisabled ? "pointer" : "not-allowed", background: acceptedTerms && !isFormDisabled ? "#f97316" : "#e5e7eb", color: acceptedTerms && !isFormDisabled ? "#fff" : "#9ca3af", transition: "all 0.2s" }}>
                 {currentUser ? "Confirm Booking" : <span><LockKeyholeOpenIcon size={15} style={{ verticalAlign: "bottom", marginRight: "6px" }} />Log in to Book</span>}
               </button>
