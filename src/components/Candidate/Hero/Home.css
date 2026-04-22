@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;600;700&display=swap');
+
 .home-container {
   width: 100%;
   height: 90vh;
@@ -6,6 +8,7 @@
   overflow: hidden;
   position: relative;
   background: #0a0a0a;
+  isolation: isolate;
 }
 
 .home-background {
@@ -13,97 +16,165 @@
   height: 100%;
   position: relative;
   overflow: hidden;
+  isolation: isolate;
 }
 
 .home-bg-media {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;        
-  position: absolute;    
+  display: block;
+  position: absolute;
   top: 0;
   left: 0;
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* --- OVERLAY FOR READABILITY --- */
+/* ── OVERLAY ── */
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 100%);
+  background:
+    linear-gradient(to right, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0.1) 100%),
+    linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 40%);
   z-index: 1;
+  pointer-events: none;
 }
 
-/* --- HERO TEXT OVERLAYS --- */
+/* ── HERO TEXT ── */
 .hero-text {
   position: absolute;
   top: 50%;
   left: 8%;
   transform: translateY(-50%);
   color: white;
-  z-index: 2;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  max-width: 600px;
+  z-index: 5;
+  max-width: 560px;
+  pointer-events: auto;
+}
+
+/* Small eyebrow label */
+.hero-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #ff5e00;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero-label::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 2px;
+  background: #ff5e00;
+  border-radius: 2px;
 }
 
 .hero-text h1 {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(3rem, 5vw, 5.5rem);
+  font-size: clamp(3rem, 5vw, 5.8rem);
   line-height: 1;
-  margin: 0;
+  margin: 0 0 16px;
   letter-spacing: 2px;
   color: #ffffff;
+  text-shadow: 0 4px 24px rgba(0,0,0,0.5);
 }
 
 .hero-text p {
-  font-family: "Sekuya", system-ui, sans-serif;
-  font-size: clamp(1rem, 2vw, 1.4rem);
-  margin-top: 15px;
-  color: #e5e7eb;
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+  font-weight: 400;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.6;
+  margin: 0 0 28px;
+  max-width: 420px;
 }
 
-/* --- INTERACTIVE DOTS (PAGINATION) --- */
-.hero-dots {
+/* CTA button */
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 4;
+  background: #ff5e00;
+  color: #fff;
+  border: none;
+  padding: 13px 28px;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(255,94,0,0.35);
+}
+.hero-cta svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+}
+.hero-cta:hover {
+  background: #e05300;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(255,94,0,0.45);
+}
+.hero-cta:hover svg {
+  transform: translateX(4px);
+}
+
+/* ── BOTTOM BAR (dots + play button in one row) ── */
+.hero-bottom-bar {
   position: absolute;
-  bottom: 50px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 36px;
+  left: 0;
+  right: 0;
+  padding: 0 50px;
   display: flex;
-  gap: 15px;
-  z-index: 2;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 4;
+  pointer-events: none; /* bar itself doesn't block clicks */
+}
+
+.hero-dots {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  pointer-events: auto; /* dots are clickable */
 }
 
 .hero-dot {
-  width: 12px;
-  height: 12px;
-  background: rgba(255, 255, 255, 0.4);
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.35);
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
 .hero-dot:hover {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.7);
 }
-
 .hero-dot.active {
-  background: #ff5e00; 
-  transform: scale(1.4);
-  box-shadow: 0 0 10px rgba(255, 94, 0, 0.5);
+  background: #ff5e00;
+  width: 24px;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(255, 94, 0, 0.6);
 }
 
-/* --- PLAY BUTTON & TOOLTIP --- */
-.explore-wrapper {
-  position: absolute;
-  bottom: 40px;
-  right: 50px;
-  z-index: 3;
-}
-
+/* ── PLAY BUTTON ── */
 .play-button {
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 18px;
+  padding: 14px;
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
@@ -111,101 +182,151 @@
   align-items: center;
   justify-content: center;
 }
-
 .play-button:hover {
   transform: scale(1.1);
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 94, 0, 0.25);
   border-color: #ff5e00;
 }
 
 .play-icon {
-  width: 32px;
-  height: 32px;
-  filter: invert(1);
-  transition: 0.3s;
+  width: 22px;
+  height: 22px;
 }
 
-/* Tooltip Logic */
+/* Tooltip */
 .tooltip-container {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  pointer-events: auto; /* play button is clickable */
 }
-
 .tooltip-text {
   visibility: hidden;
-  background-color: rgba(17, 24, 39, 0.9);
+  background-color: rgba(17, 24, 39, 0.92);
   color: #fff;
   text-align: center;
-  padding: 8px 4px;
-  border-radius: 8px;
-  /* font-family: "Sekuya", system-ui, sans-serif; */
-   font-family: 'Outfit', sans-serif;
-  font-size: 13px;
+  padding: 7px 12px;
+  border-radius: 7px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
   position: absolute;
-  bottom: 130%; 
+  bottom: 130%;
   left: 50%;
-  transform: translateX(-50%) translateY(10px);
+  transform: translateX(-50%) translateY(8px);
   white-space: nowrap;
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  transition: all 0.25s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
-
 .tooltip-text::after {
   content: "";
   position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -6px;
-  border-width: 6px;
+  top: 100%; left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
   border-style: solid;
-  border-color: rgba(17, 24, 39, 0.9) transparent transparent transparent;
+  border-color: rgba(17, 24, 39, 0.92) transparent transparent transparent;
 }
-
 .tooltip-container:hover .tooltip-text {
   visibility: visible;
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
 
-/* --- ANIMATIONS --- */
+/* ── ANIMATIONS ── */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-
 .fade-in {
-  animation: fadeIn 0.5s ease-in-out;
+  animation: fadeIn 0.5s ease-out forwards;
 }
 
-/* --- MOBILE RESPONSIVENESS --- */
+/* ══════════════════════════════════
+   MOBILE
+══════════════════════════════════ */
 @media (max-width: 768px) {
   .home-container {
     height: 100vh;
-    margin-top: 0px !important;
+    margin-top: 0 !important;
   }
-  .hero-text {
-    left: 5%;
-    right: 5%;
-    text-align: center;
-    top: 40%;
-  }
-  .hero-text h1 {
-    font-size: 2.8rem;
-  }
+
+  /* Stronger overlay on mobile — images are bright/busy */
   .hero-overlay {
-    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 100%);
+    background:
+      linear-gradient(to bottom,
+        rgba(0,0,0,0.55) 0%,
+        rgba(0,0,0,0.2)  35%,
+        rgba(0,0,0,0.2)  55%,
+        rgba(0,0,0,0.72) 100%
+      );
   }
-  .explore-wrapper {
-    bottom: 30px;
-    right: 30px;
+
+  .hero-text {
+    left: 16px;
+    right: 16px;
+    top: auto;
+    bottom: 90px;
+    transform: none;
+    text-align: center;
+    padding: 22px 20px 20px;
+    max-width: 100%;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
   }
-  .hero-dots {
-    bottom: 40px;
-    left: 30%; 
+
+  .hero-label {
+    justify-content: center;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    margin-bottom: 10px;
+  }
+  .hero-label::before { display: none; }
+
+  .hero-text h1 {
+    font-size: 2.6rem;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.9), 0 0 40px rgba(0,0,0,0.7);
+    margin-bottom: 12px;
+  }
+
+  .hero-text p {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.9);
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .hero-cta {
+    padding: 12px 24px;
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  /* Bottom bar */
+  .hero-bottom-bar {
+    bottom: 2px;
+    padding: 0 24px;
+  }
+
+  .hero-dot {
+    width: 7px;
+    height: 2px;
+  }
+  .hero-dot.active {
+    width: 20px;
+  }
+
+  .play-button {
+    padding: 12px;
+  }
+  .play-icon {
+    width: 18px;
+    height: 18px;
   }
 }

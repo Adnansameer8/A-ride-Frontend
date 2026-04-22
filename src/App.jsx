@@ -24,11 +24,14 @@ import AdminDashboard from "./components/Admin/AdminDashboard.jsx";
 import UserManagement from "./components/Admin/UserManagement.jsx";
 import BookingManagement from "./components/Admin/BookingManagement.jsx";
 import TripManagement from "./components/Admin/Tripmanagement.jsx";
-
+import ServicesManagement from "./components/Admin/Servicesmanagement.jsx";
 // Support Components
 import SupportHistory from "./components/Support/SupportHistory.jsx";
 import SupportDashboard from "./components/Support/SupportDashboard.jsx";
 import TicketManagement from './components/Support/TicketManagement';
+
+//Terms
+import Terms from './components/Terms.jsx';
 
 export default function App() {
   return (
@@ -162,11 +165,20 @@ export default function App() {
             </SupportRoute>
           } 
         />
-
+        <Route
+          path="/admin/servicesManagement"
+          element={
+            <AdminRoute>
+              <ServicesManagement />
+            </AdminRoute>
+          }
+        />
+            <Route path="/terms" element={<Terms />} />
         {/* ── Fallback ──────────────────────────────────── */}
         <Route path="*" element={<Navigate to="/" replace />} />
-
+         
       </Routes>
+      
     </AuthProvider>
   );
 }
